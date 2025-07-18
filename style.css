@@ -8,3 +8,16 @@ input, button {
   margin: 10px;
   padding: 8px;
 }
+
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: white;
+}
+
+button, input {
+  border: none;
+}
+
+.dark-toggle {
+  margin-bottom: 10px;
+}
