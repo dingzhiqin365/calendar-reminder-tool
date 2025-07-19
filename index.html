@@ -1,17 +1,36 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>日历提醒工具</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>カレンダーリマインダー</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>🗓️ 我的日历提醒工具</h1>
-  <button class="dark-toggle" onclick="toggleDarkMode()">🌙 切换黑夜模式</button>
-  <input type="date" id="datePicker" />
-  <input type="text" id="eventInput" placeholder="输入提醒内容" />
-  <button onclick="addReminder()">添加提醒</button>
-  <ul id="reminderList"></ul>
+  <div class="container">
+    <h1>📅 カレンダーリマインダー</h1>
+
+    <button class="dark-toggle" onclick="toggleDarkMode()">🌙 ダークモード切替</button>
+
+    <div class="form-group">
+      <input type="date" id="datePicker" />
+      <input type="time" id="timePicker" />
+      <input type="text" id="eventInput" placeholder="リマインダー内容を入力" />
+      <select id="advancePicker">
+        <option value="0">時間通り</option>
+        <option value="1">1時間前</option>
+        <option value="2">2時間前</option>
+        <option value="4">4時間前</option>
+      </select>
+    </div>
+
+    <div class="button-group">
+      <button onclick="addReminder()">追加</button>
+      <button class="clear-btn" onclick="clearAllReminders()">🧹 全削除</button>
+    </div>
+
+    <ul id="reminderList"></ul>
+  </div>
 
   <script src="script.js"></script>
 </body>

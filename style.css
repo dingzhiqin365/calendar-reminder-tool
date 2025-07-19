@@ -1,23 +1,134 @@
 body {
-  font-family: sans-serif;
+  font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+  background-color: #fdfdfd;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 720px;
+  margin: 40px auto;
   padding: 20px;
-  background-color: #f0f4f8;
+  box-shadow: 0 0 15px rgba(0,0,0,0.08);
+  border-radius: 10px;
+  background-color: #ffffff;
 }
 
-input, button {
-  margin: 10px;
-  padding: 8px;
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #0078d7;
 }
 
-body.dark-mode {
-  background-color: #1e1e1e;
+.form-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+input, select, button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #0078d7;
   color: white;
+  border: none;
+  cursor: pointer;
 }
 
-button, input {
-  border: none;
+button:hover {
+  background-color: #005aaf;
+}
+
+button.clear-btn {
+  background-color: #f44336;
+}
+
+button.clear-btn:hover {
+  background-color: #c62828;
 }
 
 .dark-toggle {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  display: block;
+  background-color: #444;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li {
+  background-color: #f0f4f8;
+  margin-bottom: 8px;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* ダークモード */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.dark-mode .container {
+  background-color: #2b2b2b;
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode button {
+  background-color: #3a3a3a;
+  color: #f0f0f0;
+  border-color: #555;
+}
+
+body.dark-mode li {
+  background-color: #3d3d3d;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.button-group button {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  border: none;
+}
+
+.button-group .clear-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.button-group .clear-btn:hover {
+  background-color: #c62828;
+}
+
+
+/* スマホ対応 */
+@media screen and (max-width: 500px) {
+  .form-group {
+    grid-template-columns: 1fr;
+  }
+
+  button {
+    width: 100%;
+  }
 }
