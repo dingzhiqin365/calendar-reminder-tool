@@ -1,4 +1,4 @@
-// Firebase初期化（firebaseConfig をあなたのものに合わせてください）
+// Firebase初期化（firebaseConfig をあなたのものに合わせてください）a
 const firebaseConfig = {
   apiKey: "AIzaSyCJTximsAIxHZY2Aoct78mdsCaO6lHZ3v8",
   projectId: "calendar-reminder-tool-55444",
