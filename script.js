@@ -1,19 +1,21 @@
-// Firebase初期化（firebaseConfig をあなたのものに合わせてください）
-const firebaseConfig = {
-  apiKey: "AIzaSyCJTximsAIxHZY2Aoct78mdsCaO6lHZ3v8",
-  projectId: "calendar-reminder-tool-55444",
-  messagingSenderId: "239027689161",
-  appId: "1:239027689161:web:c17ff22ad7852a8111df18"
-};
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
+document.addEventListener("DOMContentLoaded", () => {
+  // Firebase初期化
+  const firebaseConfig = {
+    apiKey: "AIzaSyCJTximsAIxHZY2Aoct78mdsCaO6lHZ3v8",
+    projectId: "calendar-reminder-tool-55444",
+    messagingSenderId: "239027689161",
+    appId: "1:239027689161:web:c17ff22ad7852a8111df18"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
 
-// Service Worker登録
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("firebase-messaging-sw.js")
-    .then(() => console.log("✅ Service Worker 登録済み"))
-    .catch(err => console.error("❌ Service Worker エラー:", err));
-}
+  // Service Worker 登録
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("firebase-messaging-sw.js")
+      .then(() => console.log("✅ Service Worker 登録済み"))
+      .catch(err => console.error("❌ Service Worker エラー:", err));
+  }
+
 
 // 通知許可とトークン取得
 Notification.requestPermission().then((permission) => {
