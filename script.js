@@ -13,6 +13,7 @@ firebase.initializeApp(firebaseConfig);
 const messaging = getMessaging();
 
 // 通知許可とトークン取得（VAPIDキーはCloud Messagingで確認）
+
 Notification.requestPermission().then((permission) => {
   if (permission === "granted") {
     console.log("Notification permission granted.");
