@@ -1,3 +1,6 @@
+import { getMessaging, getToken } from "firebase/messaging";
+
+
 // Firebase初期化（あなたの firebaseConfig に置き換えてください）
 const firebaseConfig = {
   apiKey: "AIzaSyCJTximsAIxHZY2Aoct78mdsCaO6lHZ3v8",
@@ -6,17 +9,31 @@ const firebaseConfig = {
   appId: "1:239027689161:web:c17ff22ad7852a8111df18"
 };
 firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
+
+const messaging = getMessaging();
 
 // 通知許可とトークン取得（VAPIDキーはCloud Messagingで確認）
-messaging.requestPermission().then(() => {
-  console.log("✅ 通知許可を取得");
-  return messaging.getToken({ vapidKey: "BJUKHoScbrwavPrwjIUDvhtT-ZTT7Cs3zq_uwe6dmq1gE54Z245W3OLc-5Dfxffbo8dRJdp-OkcfMpYd7JfP7Jg" });
-}).then(token => {
-  console.log("🔑 通知トークン:", token);
-}).catch(err => {
-  console.error("通知エラー:", err);
+Notification.requestPermission().then((permission) => {
+  if (permission === "granted") {
+    console.log("Notification permission granted.");
+
+    getToken(messaging, {
+      vapidKey: "BJUKHoScbrwavPrwjIUDvhtT-ZTT7Cs3zq_uwe6dmq1gE54Z245W3OLc-5Dfxffbo8dRJdp-OkcfMpYd7JfP7Jg"
+    }).then((currentToken) => {
+      if (currentToken) {
+        console.log("Token:", currentToken);
+        // トークンをサーバーに送信して通知を受け取れるようにする
+      } else {
+        console.log("No registration token available.");
+      }
+    }).catch((err) => {
+      console.log("An error occurred while retrieving token. ", err);
+    });
+  } else {
+    console.log("Notification permission denied.");
+  }
 });
+
 
 // Service Worker 登録
 if ("serviceWorker" in navigator) {
