@@ -1,7 +1,4 @@
-import { getMessaging, getToken } from "firebase/messaging";
-
-
-// Firebase初期化（あなたの firebaseConfig に置き換えてください）
+// Firebase初期化（firebaseConfig をあなたのものに合わせてください）
 const firebaseConfig = {
   apiKey: "AIzaSyCJTximsAIxHZY2Aoct78mdsCaO6lHZ3v8",
   projectId: "calendar-reminder-tool-55444",
@@ -9,26 +6,37 @@ const firebaseConfig = {
   appId: "1:239027689161:web:c17ff22ad7852a8111df18"
 };
 firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
 
-const messaging = getMessagingmessaging();
-
-// 通知許可とトークン取得（VAPIDキーはCloud Messagingで確認）
-messaging.requestPermission().then(() => {
-  console.log("✅ 通知許可を取得");
-  return messaging.getToken({ vapidKey: "BJUKHoScbrwavPrwjIUDvhtT-ZTT7Cs3zq_uwe6dmq1gE54Z245W3OLc-5Dfxffbo8dRJdp-OkcfMpYd7JfP7Jg" });
-}).then(token => {
-  console.log("🔑 通知トークン:", token);
-}).catch(err => {
-  console.error("通知エラー:", err);
-});
-
-// Service Worker 登録
+// Service Worker登録
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("firebase-messaging-sw.js")
     .then(() => console.log("✅ Service Worker 登録済み"))
     .catch(err => console.error("❌ Service Worker エラー:", err));
 }
 
+// 通知許可とトークン取得
+Notification.requestPermission().then((permission) => {
+  if (permission === "granted") {
+    console.log("🔐 通知許可済み");
+    messaging.getToken({
+      vapidKey: "BJUKHoScbrwavPrwjIUDvhtT-ZTT7Cs3zq_uwe6dmq1gE54Z245W3OLc-5Dfxffbo8dRJdp-OkcfMpYd7JfP7Jg"
+    }).then((token) => {
+      if (token) {
+        console.log("📲 トークン取得:", token);
+        // サーバーに送信する処理をここに書く（任意）
+      } else {
+        console.log("⚠️ トークン未取得");
+      }
+    }).catch((err) => {
+      console.error("🚫 トークン取得エラー:", err);
+    });
+  } else {
+    console.log("❌ 通知拒否されました");
+  }
+});
+
+// リマインダー関連処理
 const reminders = JSON.parse(localStorage.getItem("reminders")) || [];
 
 function addReminder() {
@@ -39,9 +47,7 @@ function addReminder() {
 
   if (date && time && event) {
     reminders.push({
-      date,
-      time,
-      event,
+      date, time, event,
       advanceHours: advance,
       reminded: false
     });
@@ -77,11 +83,9 @@ function notifyUser(message) {
 
 function checkReminders() {
   const now = new Date();
-
   reminders.forEach(item => {
     const target = new Date(`${item.date}T${item.time}`);
     target.setHours(target.getHours() - item.advanceHours);
-
     const diff = target - now;
 
     if (diff > 0 && diff < 60000 && !item.reminded) {
@@ -105,11 +109,10 @@ function toggleDarkMode() {
   document.body.classList.toggle("dark-mode");
 }
 
-// PWA インストールボタン処理
+// PWA インストール処理
 let deferredPrompt;
 window.addEventListener("beforeinstallprompt", (e) => {
-  console.log("📥 インストールイベント発生"); // ←このログが出ればOK
-
+  console.log("📥 インストールイベント発生");
   e.preventDefault();
   deferredPrompt = e;
   const installBtn = document.getElementById("installBtn");
@@ -117,12 +120,12 @@ window.addEventListener("beforeinstallprompt", (e) => {
 
   installBtn.addEventListener("click", () => {
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(choice => {
+    deferredPrompt.userChoice.then(() => {
       deferredPrompt = null;
     });
   });
 });
 
+// 初期実行
 renderReminders();
 setInterval(checkReminders, 60000);
-
