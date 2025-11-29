@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       renderReminders();
     }
   };
+  
 
   window.toggleDarkMode = function () {
     document.body.classList.toggle("dark-mode");

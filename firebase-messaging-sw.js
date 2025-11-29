@@ -18,6 +18,6 @@ messaging.onBackgroundMessage(payload => {
 
   self.registration.showNotification(title, {
     body: body,
-    icon: "assets/icon-192.png" // 通知アイコン
+    icon: "assets/icon-192.png" //  通知アイコン
   });
 });
