@@ -44,11 +44,13 @@ function addReminder() {
   const time = document.getElementById("timePicker").value;
   const event = document.getElementById("eventInput").value;
   const advance = parseInt(document.getElementById("advancePicker").value);
+  const repeat = document.getElementById("repeatPicker").value;
 
   if (date && time && event) {
     reminders.push({
       date, time, event,
       advanceHours: advance,
+      repeat,
       reminded: false
     });
     localStorage.setItem("reminders", JSON.stringify(reminders));
@@ -61,7 +63,8 @@ function renderReminders() {
   list.innerHTML = "";
   reminders.forEach(item => {
     const li = document.createElement("li");
-    li.textContent = `📅 ${item.date} 🕒 ${item.time} - ${item.event}（${item.advanceHours}時間前）`;
+    li.textContent = `📅 ${item.date} 🕒 ${item.time} - ${item.event}（${item.advanceHours}時間前）` +
+      (item.repeat !== "none" ? ` 🔁 ${item.repeat}` : "");
     list.appendChild(li);
   });
 
@@ -92,6 +95,21 @@ function checkReminders() {
       const msg = `🔔 「${item.event}」は ${item.time} に開始予定（${item.advanceHours}時間前通知）`;
       notifyUser(msg);
       item.reminded = true;
+
+      // 繰り返し設定がある場合は次回に更新
+      if (item.repeat && item.repeat !== "none") {
+        const original = new Date(`${item.date}T${item.time}`);
+        if (item.repeat === "daily") {
+          original.setDate(original.getDate() + 1);
+        } else if (item.repeat === "weekly") {
+          original.setDate(original.getDate() + 7);
+        } else if (item.repeat === "monthly") {
+          original.setMonth(original.getMonth() + 1);
+        }
+        item.date = original.toISOString().split("T")[0];
+        item.reminded = false; // 次回の通知に備えてリセット
+      }
+
       localStorage.setItem("reminders", JSON.stringify(reminders));
     }
   });
